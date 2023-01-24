@@ -195,6 +195,7 @@ Instead of always calling `R` by using its full path (`/projects/yourUserName/R-
 Now, anywhere you navigate within the current session, you will be able to start R, just by typing:  
 
 .. code-block:: bash
+    
     R
 
 Or if have a batch script, you can add that line to any batch script before your program calls `R`.  For example:
