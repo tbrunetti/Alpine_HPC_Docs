@@ -1,5 +1,5 @@
-Install a local copy of R (recommended)
-=======================================
+Install a local copy of R 
+==========================
 
 Install R
 ^^^^^^^^^
@@ -8,7 +8,7 @@ Install R
 
 .. code-block:: bash
 
-    $ acompile  
+    acompile  
 
 .. image:: images/acompile_node.png
    :width: 1000
@@ -17,7 +17,7 @@ Install R
 
 .. code-block:: bash 
 
-	$ cd /projects/yourUserName
+	cd /projects/yourUserName
 
 3.  Run the following and make sure to list the exact version of R you want to install.  In this example, I want to install R version 4.2.2.  The following set of commands will download the version of R from `CRAN` and then unpack it in your directory.  
 
@@ -111,7 +111,7 @@ The installation of R packages should not be any different than when you run R l
 
 .. code-block:: bash
 
-    $ acompile  
+    acompile  
 
 2.  Spawn off your R session:  
 

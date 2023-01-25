@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Use R version on SLURM Module Stack &#8212; Alpine HPC Documentation  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="use-r-version-on-slurm-module-stack">
+<h1>Use R version on SLURM Module Stack<a class="headerlink" href="#use-r-version-on-slurm-module-stack" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="r-versions-available">
+<h2>R versions available<a class="headerlink" href="#r-versions-available" title="Permalink to this headline">¶</a></h2>
+<p>To use a pre-installed base R version on Alpine, you will need to view which R version to use first.  This can be done by running the following:</p>
+<ol class="arabic simple">
+<li><p>Request and start a compile node on Alpine</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>acompile
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/acompile_node.png"><img alt="_images/acompile_node.png" src="_images/acompile_node.png" style="width: 1000px;" /></a>
+<ol class="arabic simple" start="2">
+<li><p>Use the <cite>module</cite> command to view which versions of R are available:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module avail R/
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/rversions.png"><img alt="_images/rversions.png" src="_images/rversions.png" style="width: 800px;" /></a>
+<p>Here you can see that there are two versions of R preinstalled on the cluster:</p>
+<ul class="simple">
+<li><p>R/3.6.3</p></li>
+<li><p>R/4.2.2</p></li>
+</ul>
+<p><strong>If you require a different version that is not installed on the cluster, you will need to install the version you need yourself locally.</strong>  We have provided a few options for you:</p>
+<ol class="arabic simple">
+<li><p>Installing R locally by following our instructions here</p></li>
+<li><p>Use Singularity to containerize your software locally and move the container into Alpine</p></li>
+<li><p>Use conda to build an R environment</p></li>
+</ol>
+</div>
+<div class="section" id="using-r">
+<h2>Using R<a class="headerlink" href="#using-r" title="Permalink to this headline">¶</a></h2>
+<p>If you want to use R <em>interactively</em> in an R session follow the directions below:</p>
+<ol class="arabic simple">
+<li><p>Request and start a compile node on Alpine</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>acompile
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/acompile_node.png"><img alt="_images/acompile_node.png" src="_images/acompile_node.png" style="width: 1000px;" /></a>
+<ol class="arabic simple" start="2">
+<li><p>Load in the R version from the stack that you want to use:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load R/4.2.2
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Start the R session:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>R
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/rsession_module.png"><img alt="_images/rsession_module.png" src="_images/rsession_module.png" style="width: 800px;" /></a>
+<p><strong>Alternatively</strong>, if you want to use the R module in a batch script, you just need to add the module line to your batch script.  For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#SBATCH --nodes=1</span>
+<span class="c1">#SBATCH --partition=amilan</span>
+<span class="c1">#SBATCH --account=amc-general</span>
+<span class="c1">#SBATCH --time=01:00:00</span>
+<span class="c1">#SBATCH --memory=10G</span>
+<span class="c1">#SBATCH --log=myOutput%J.log</span>
+<span class="c1">#SBATCH --eror=myOutput%J.err</span>
+
+module load R/4.2.2
+
+Rscript myRscript.R
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-cran-and-bioconductor-packages">
+<h2>Installing CRAN and Bioconductor packages<a class="headerlink" href="#installing-cran-and-bioconductor-packages" title="Permalink to this headline">¶</a></h2>
+<p>It is likely that you will need to install your own packages as right now our module stack only has <cite>tidyverse</cite> and <cite>BiocManager</cite> installed as packages.  In order to install your own libraries, follow these instructions:</p>
+<p>If you haven’t already started an R interactive session, follow the directions listed above under the <cite>Using R</cite> section of the documentation.  Once you have started an R session, you can install the libraries you need as you normally would.  For example, let’s try to install <cite>data.table</cite>.</p>
+<ol class="arabic simple">
+<li><p>Install CRAN pacakges like you normally would in an interactive session:</p></li>
+</ol>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;data.table&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You will see it automatically installs and places all of your R binary library files at the following path: <cite>/projects/yourUserName/software/Rlibs</cite></p>
+<ol class="arabic simple" start="2">
+<li><p>You can check your install of the package by loading the library in the R session:</p></li>
+</ol>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>If you wanted to install a Bioconductor library, you will need to just load the <cite>BiocManager</cite> library into your R session first.  For example, if we wanted to install the bioconductor package, <cite>limma</cite>, we would do the following:</p></li>
+</ol>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">BiocManager</span><span class="p">)</span>
+<span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&quot;limma&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Alpine HPC Documentation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tonya Brunetti.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/useRmodule.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
